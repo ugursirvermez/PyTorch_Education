@@ -40,12 +40,69 @@ Bu kurs sayesinde DL ve ML arasında bir bağlantı kuracağız. DL’i pyTorch 
 
 
 ## Nöral Ağlar Nedir?
+![Neural Network](https://github.com/user-attachments/assets/2210f8e9-2851-4252-b7bb-fe1ca6f2924c)
 - Elimizde farklı türlerden veriler var. Bu veriler resim, ses kaydı, metin veya pek çok şey olabilir. Ben bunları önce sayıya çeviriyorum. Belirli kalıplara sokarak onları listeliyorum ve ilgili bir dizinin veya bir setin içerisine yerleştiriyorum. İşte bu sayısal yani dijitalleştirilen verilerin ne olduğunu bilgisayar çok iyi anlayabiliyor. Yani birbirleriyle ilişkili olup olmadığını ölçmeye, anlamlandırmaya hazır hale geliyor.
 - İşte bu sayıya çevirdiğimiz verilerle biz problemimizin çözümüne doğru bir yaklaşım belirliyoruz. Bu yaklaşım sayesinde eldeki verileri birbirleriyle karşılaştırıyor, birbirleriyle ilişkilendiriyoruz. Bu ilişkilerden anlamlı bir sonuç elde edebiliyorsak bunu öğreniyoruz. Eğer elde edemiyorsak bu seçeneği eliyoruz ve diğer yolların güvenilirliğine inanıyoruz. En doğru sonuca ulaşana kadar benzer süreçleri takip ediyoruz.
 - En sonunda elimizde belirli sonuçlar ortaya çıkıyor. Bunlar bizim yaklaşımımıza uygunsa bunun geçerli bir cevap olduğunu gözlemliyoruz.
+![Neural Network Example](https://github.com/user-attachments/assets/35307c35-4e71-46e8-92c0-1455343ad974)
 
 ## PyTorch Akışı ve Temel Kütühaneler
 | TorchVision Kütüphaneleri  | Ne İşe Yarar? |
 | ------------- | ------------- |
 | torchvision.datasets  | Veri setlerini alma ve verileri fonksiyonlara doldurmak için kullanılan fonksiyonları içinde barındırır.  |
-| Content Cell  | Content Cell  |
+| torchvision.models  | Önceden eğitilmiş Computer Vision modelleri kullanarak kendi algoritmalarınıza dökmenizi sağlar.  |
+| torchvision.transforms | Verilerinizi kendi Computer Vision’ınıza uygulayarak (manipüle ederek) ML için uygun hale getiren fonksiyonları kapsar. Görselleri sayılara çevirir. |
+| torch.utils.data.Dataset | Dataset sınıfının temel PyTorch sınıfıdır. |
+| torch.utils.data.DataLoader | Veri setlerini Python nesnelerine dönüştürmedir. |
+
+## PyTorch ve Yardımcı Kütüphanelerin Kurulumu
+- PyTorch’u çalıştırmak için öncelikle PyTorch kurmamız lazım. Zekice! O zaman kurulum için şunları yapmak uygun olacaktır:
+- [colab.research.google.com](http://colab.research.google.com) adresine giriyoruz. Bu adres, Github’taki projelere ulaşmamızı da sağlıyor. Github ağında çok fazla zaman geçiriyorsanız kullanabilirsiniz.
+- Açılınca yeni bir not defteri oluşturuyoruz ve ismini “01_pyTorch” olarak değiştiriyoruz.
+- Yukarıdaki menülerden birinde Runtime (Çalışma Zamanı) yazıyor. Tıklıyoruz.
+- Çalışma Zamanı Türünü Değiştir (Change Runtime Type) butonuna basıyoruz. Standard ayarda GPU seçeneğini seçiyoruz.
+- Kod olarak aşağıdakini yazıyoruz;
+```PowerShell
+!nvidia-smi 
+//Bu kod ekranı kartının hangi PCI-E yola sahip //PCI-E: RAM ve ekran kartlarının ana kartta kullandıkları yol türüdür. Alt versiyonları vardır.
+//olduğunu belirtmektedir. Yapmak gerekli değil.
+```
+- Kütüphaneyi entegre ediyoruz.
+```Python
+#Torch Kütüphanesi
+import torch #torch kütüphanesi
+#Pandas, veri işleme ve veri analizi için kullanılan bir kütüphanedir. 
+#Kütüphane temel olarak zaman etiketli serileri ve sayısal tabloları işler.
+import pandas as pd 
+#NumPy, büyük, çok boyutlu dizileri ve matrisleri destekleyen, bu diziler üzerinde çalışacak üst düzey matematiksel işlevler ekleyen bir kitaplıktır.
+import numpy as np
+#Matplotlib, NumPy için yapılmış bir çizim kitaplığıdır.
+import matplotlib.pyplot as plt
+print(torch.__version__)
+```
+- Devam edebilmek için yerel PyTorch kurulumu yapılmalıdır. Kurulum için [pytorch.org](http://pytorch.org) sitesine girip bahsettiği adımlara bakabiliriz. Windows kurulumunda CUDA yüklemesine ayrıca gerek duyulmaktadır. Lütfen PyTorch kütüphanesini kurmadan önce Python programlama dilini bilgisayarınıza yükleyin!
+- **Mac** kurulumu için;
+```PowerShell
+-Torch Kurulumu-
+pip3 install torch torchvision torchaudio
+veya
+conda install pytorch::pytorch torchvision torchaudio -c pytorch
+-Numpy Kurulumu-
+conda install numpy
+-Pandas Kurulumu-
+conda install pandas
+-Matplotlib Kurulumu-
+conda install matplotlib
+```
+- **Windows** kurulumu için;
+```PowerShell
+-Torch Kurulumu-
+pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/wh1/cu121
+-Numpy Kurulumu-
+pip install numpy
+-Pandas Kurulumu-
+pip install pandas
+-Matplotlib Kurulumu-
+python -m pip install -U matplotlib
+```
+**NOT:**< Eğer CUDA sürümünü yüklememişseniz lütfen nVidia CUDA Toolkit’inin sürümlerini yükleyiniz. Yukarıdaki !nvidia-smi kodu ile sistem bilginizi kontrol edin! Kurulum sitesine ulaşmak için tıklayın!
