@@ -16,9 +16,9 @@ jobs:
           
       - name: Add remote 
         env:
-          HG: ${{ secrets.HF }}
+          HG: ${{ secrets.HF}}
         run: git remote add space https://ugursirvermez:$HF@huggingface.co/spaces/ugursirvermez/FoodVision101
       - name: Push to hub
         env:
-          HG: ${{ secrets.HF }}
+          HG: ${{ secrets.HF}}
         run: git push https://ugursirvermez:$HF@huggingface.co/spaces/ugursirvermez/FoodVision101 main
