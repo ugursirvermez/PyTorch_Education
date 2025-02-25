@@ -47,6 +47,16 @@ Bu kurs sayesinde DL ve ML arasında bir bağlantı kuracağız. DL’i pyTorch 
 ![Neural Network Example](https://github.com/user-attachments/assets/35307c35-4e71-46e8-92c0-1455343ad974)
 
 ## PyTorch Akışı ve Temel Kütühaneler
+Yapay zekaya doğru giden öğrenme modelleri, Pytorch kurulumu, tensörlerin skaler büyüklüklerden yola çıkarak tanımlanması ve PyTorch kütüphanelerinde kodlanmasına kadar geniş bir kodlama içeriği oluşturduk. Şimdi Kendi nöral ağlarımızı kurmak, derin öğrenme modellerine geçmek için PyTorch’un iş akışı yukarıdaki dosyalarda yer almaktadır.
+- PyTorch Workflow, ile ilgili aşağıdaki adımları uygulandı:
+    - veri hazırlama ve doldurma,
+    - Bir model inşa etme,
+    - Modelin içerisine verileri yerleştirme ve eğitme,
+    - Tahminler yaptırma ve modelin değerlendirmesi,
+    - Modeli kaydetme ve başka yerlerde kullanma.
+    - Hepsini bir arada kullanabilme.
+![Pytorch workflow](https://github.com/user-attachments/assets/cb0c8cfb-e21f-4440-8acb-5b6fc2bc56a6)
+
 | TorchVision Kütüphaneleri  | Ne İşe Yarar? |
 | ------------- | ------------- |
 | torchvision.datasets  | Veri setlerini alma ve verileri fonksiyonlara doldurmak için kullanılan fonksiyonları içinde barındırır.  |
@@ -105,4 +115,28 @@ pip install pandas
 -Matplotlib Kurulumu-
 python -m pip install -U matplotlib
 ```
-**NOT:**< Eğer CUDA sürümünü yüklememişseniz lütfen nVidia CUDA Toolkit’inin sürümlerini yükleyiniz. Yukarıdaki !nvidia-smi kodu ile sistem bilginizi kontrol edin! Kurulum sitesine ulaşmak için tıklayın!
+**NOT:** Eğer CUDA sürümünü yüklememişseniz lütfen nVidia CUDA Toolkit’inin sürümlerini yükleyiniz. Yukarıdaki !nvidia-smi kodu ile sistem bilginizi kontrol edin! Kurulum sitesine ulaşmak için tıklayın!
+
+## PyTorch Nöral Ağ Sınıflandırması (NN Classification)
+Makine öğrenmesinde önemli bir noktaya doğru giriş yapıyoruz. Derin öğrenme aşamasında doğrusal yaklaşıma önem verdik. Şimdi sınıflandırma aşamasına geliyoruz. Bu sınıflandırma aslında bizim derin öğrenmenin sonucunda karar alma aşamamızın önemli bir parçasını oluşturuyor. Örneğin bir e-postanın spam olup olmadığını nasıl anlarız? Yani bir e-postayı spam yapan nedir? Yahut resimdeki kişi kadın mı yoksa erkek mi olduğuna nasıl karar veririz? Yukarıda verdiğimiz iki örnekte sadece iki seçenekli bir sınıflandırmadan oluşuyor. Spamdır yoksa spam değildir. Erkektir yada kadındır. Bu tip ikili sınıflandırma yani “ya biri ya da diğeridir” şeklinde olan sınıflandırmalara “Binary Classification” denir. Binary denmesinin sebebi 0 ve 1’i temsil eden True/False ikilisini oluşturmasıdır. Bir başka sınıflandırma ise birden fazla seçeneğimiz olan durumlarda kullanılan “Multiclass Classification” bulunmaktadır. Multiclass Classification, birden fazla seçenekte kullanılır. Örneğin resimdeki yemeğin hamburger, pizza veya biftek olması gibi pek çok seçeneğin olduğu durumlarda kullanılır. Multiclass ve Binary sınıflandırmalarına bakıldığında her bir nesnenin (resim, e-posta vs.) sadece bir özelliği var ve tek bir kritere bakılarak sonuca varılır ve kararın oluşmasında etkilidir. Ancak birden fazla durumun ve ihtimalin olduğu durumlarda olunabilir. Örneğin, “Derin Öğrenme” adlı başlıklı makalenin içerisinde yazılanlara bakılarak, makalenin adı değiştirilebilir veya düzenlenebilir. Bu durumda makalenin içerisinde başlığa uyumlu, anlamlı metinlerin elde edilmesi önem kazanır. İçindeki metinleri anlamlandırmak için etiketler kullanılır. Bu etiketler bir veya birden fazla durumla karşılaştırılarak oluşturulabilir. İşte bu tip durumların oluşmasında ve etiket kullanılarak yapılan çok boyutlu sınıflandırmaya “Multilabel Classification” denir. Bu üç tane sınıflandırmayı özetleyelim.
+
+|  Sınıflandırma  | Tanımı |
+| ------------- | ------------- |
+| Binary Classification  | Binary iki durumdan birisinin seçilmesi yani 0 veya 1 ya da True/False değerlerindeni birini seçmeyi tanımlayan sınıflandırmadır.  |
+| Multiclass Classification  | Multiclass Classification, birden fazla seçenekte her bir seçeneğin sadece bir etiket olduğu durumlarda kullanılır.  |
+| Multilabel Classification | Bir durumda, birden fazla olasılık ve sınıflandırma için olasılıkların etiketlendiği çok boyutlu karşılaştırmalı sınıflandırmadır. |
+
+![IOClass_Data](https://github.com/user-attachments/assets/19f8c440-a0aa-4c11-a788-d7bbdcee1ad1)
+
+|  Hiper Parametreler  | Binary Classification | Multiclass Classfication |
+| ------------- | ------------- | ------------- |
+| Girdi Katman Şekli | Özellikleri sayısal olarak listeleme (cinsiyet, yaş, boy, kilo v.b.). | Binary ile aynı özelliktedir. |
+| Gizli Katmanlar | Minimum 1, Maksimum sınırsız katman sayısı olabilir. | Binary ile aynı özelliktedir. |
+| Her Bir Gizli Katmandaki Nöron Sayısı | 1 sınıf veya farklı herhangi bir şey olmalı. | Her biri ayrı 1 sınıf olur (3 yiyecek, insan veya köpek fotoğrafı v.b.). |
+| Çıktı Katmanının Şekli | 1 sınıf veya farklı herhangi bir şey olmalı. | Binary ile aynı özelliktedir. |
+| Gizli Katman Aktivasyonu | Genelde ReLU kullanılır, Yapay Nöron Ağlarında Aktivasyon Fonksiyonları kullanılır. |  Binary ile aynı özelliktedir. |
+| Çıktı Aktivasyonu | Sigmoid aktivasyonu kullanılır (bunlar açıklanacak). | Softmax aktivasyonu kullanılır. |
+| Loss (Kayıp) Fonksiyonu | Binary Cross Entropy kullanılır. | Cross Entropy kullanılır. |
+| Optimizer | SGD veya Adam kullanılır. | Binary ile aynı özelliktedir. |
+
+
