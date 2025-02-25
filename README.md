@@ -117,6 +117,9 @@ python -m pip install -U matplotlib
 ```
 **NOT:** Eğer CUDA sürümünü yüklememişseniz lütfen nVidia CUDA Toolkit’inin sürümlerini yükleyiniz. Yukarıdaki !nvidia-smi kodu ile sistem bilginizi kontrol edin! Kurulum sitesine ulaşmak için tıklayın!
 
+## Regresyon Eğrileri (Bütün Örnekler)
+![linear_non_linear](https://github.com/user-attachments/assets/a6baafbf-4507-4338-8e66-5fbbf7afb956)
+
 ## PyTorch Nöral Ağ Sınıflandırması (NN Classification)
 Makine öğrenmesinde önemli bir noktaya doğru giriş yapıyoruz. Derin öğrenme aşamasında doğrusal yaklaşıma önem verdik. Şimdi sınıflandırma aşamasına geliyoruz. Bu sınıflandırma aslında bizim derin öğrenmenin sonucunda karar alma aşamamızın önemli bir parçasını oluşturuyor. Örneğin bir e-postanın spam olup olmadığını nasıl anlarız? Yani bir e-postayı spam yapan nedir? Yahut resimdeki kişi kadın mı yoksa erkek mi olduğuna nasıl karar veririz? Yukarıda verdiğimiz iki örnekte sadece iki seçenekli bir sınıflandırmadan oluşuyor. Spamdır yoksa spam değildir. Erkektir yada kadındır. Bu tip ikili sınıflandırma yani “ya biri ya da diğeridir” şeklinde olan sınıflandırmalara “Binary Classification” denir. Binary denmesinin sebebi 0 ve 1’i temsil eden True/False ikilisini oluşturmasıdır. Bir başka sınıflandırma ise birden fazla seçeneğimiz olan durumlarda kullanılan “Multiclass Classification” bulunmaktadır. Multiclass Classification, birden fazla seçenekte kullanılır. Örneğin resimdeki yemeğin hamburger, pizza veya biftek olması gibi pek çok seçeneğin olduğu durumlarda kullanılır. Multiclass ve Binary sınıflandırmalarına bakıldığında her bir nesnenin (resim, e-posta vs.) sadece bir özelliği var ve tek bir kritere bakılarak sonuca varılır ve kararın oluşmasında etkilidir. Ancak birden fazla durumun ve ihtimalin olduğu durumlarda olunabilir. Örneğin, “Derin Öğrenme” adlı başlıklı makalenin içerisinde yazılanlara bakılarak, makalenin adı değiştirilebilir veya düzenlenebilir. Bu durumda makalenin içerisinde başlığa uyumlu, anlamlı metinlerin elde edilmesi önem kazanır. İçindeki metinleri anlamlandırmak için etiketler kullanılır. Bu etiketler bir veya birden fazla durumla karşılaştırılarak oluşturulabilir. İşte bu tip durumların oluşmasında ve etiket kullanılarak yapılan çok boyutlu sınıflandırmaya “Multilabel Classification” denir. Bu üç tane sınıflandırmayı özetleyelim.
 
@@ -138,5 +141,30 @@ Makine öğrenmesinde önemli bir noktaya doğru giriş yapıyoruz. Derin öğre
 | Çıktı Aktivasyonu | Sigmoid aktivasyonu kullanılır (bunlar açıklanacak). | Softmax aktivasyonu kullanılır. |
 | Loss (Kayıp) Fonksiyonu | Binary Cross Entropy kullanılır. | Cross Entropy kullanılır. |
 | Optimizer | SGD veya Adam kullanılır. | Binary ile aynı özelliktedir. |
+
+## Multiclass Örneği
+![multiclass_final](https://github.com/user-attachments/assets/0ff49211-6e2a-447f-8305-902c6db32916)
+
+## Convolutional Neural Networks Nedir?
+Evrişimsel sinir ağları olarak Türkçe’ye çevrilmektedir. Sinir ağları derin öğrenmenin temel yapı taşlarıdır. Bu zamana kadar onları üretmeyi ve birbirlerine istenilen etiketlere uygun nasıl oluşturulabileceğini öğrendik. Bu açıdan bakıldığında her bir nöronun bir kütlesinin ve belirli değerleri taşıdığını biliyoruz. Bu değerlerin katmanlar aracılığı ile aktarılırken uğradıkları değişimler onları yorumlamamızı sağlıyor. Evrişimsel ağlar verinin bu süreç esnasında uğranan değişimleri yorumlamamızı sağlayan temel içeriktir. Yani verinin hangi yönde nasıl bir şekil aldığını katmanlarda uğradığı değişimlerden yola çıkarak yorumluyoruz. Evrişimsel sinir ağlarının en yaygın veri örneği, resim, ses veya ses frekanslarıdır. Bu modelin genel olarak 3 katmanı bulunmaktadır. Bunlar;
+
+- Evrişimsel Katman (Convolutional Layer)
+- Havuzlama Katmanı (Pooling Layer)
+- Tamamen Bağlı Katman (Fully-Connected (FC) Layer)
+
+şeklinde isimlendirilmektedir. Her birinin hangi PyTorch fonksiyonu ile ne işe yaradığını aşağıdaki tabloda açıklayacağız. Her bir katman aslında ayrı bir araştırma konusudur. Bu konu için [linkteki içeriğe](https://www.ibm.com/topics/convolutional-neural-networks) göz atabilirsiniz. Üretilmiş birçok evrişimsel sinir ağı modeli bulunmaktadır. Hatta bu modelleri IBM şirketi 1980’lerde oluşturmaya başlamıştır. Evrişimsel sinir ağının aşamalarını şu şekilde görselleştirebiliriz:
+![CNN_Figure](https://github.com/user-attachments/assets/3484b0c5-441b-48a9-b39c-6201b9359a80)
+
+|  Hiper Parametre/Katman Türü  | Ne İşe Yarar? | Tipik Değeri |
+| ------------- | ------------- | ------------- |
+| Girdi Resimler | İşinize yarayacak resimlerde ortak yollar keşfedeceğiniz dilediğiniz görseller | Kullanıcının / yazılımcının tercihine dayalı görseller|
+| Girdi Katmanı (Input Layer) | Hedeflenen resimleri işlem öncesi katmanlara ayırma | input_shape = [batch_size, image_height, image_width, color_channels]|
+| Convolutional Layer (Evrişimsel Katman) | Öğrenme çıktısını oluşturacak önemli özellikleri hedeflenen resimlerden çıkaracak katman | Çoklu işlem hacmi vardır; **torch.nn.ConvXd()** (X → çoklu değerdir) |
+| Gizli Aktivasyon /  Doğrusal Olmayan Aktivasyon (Hidden / Non_linear) | Doğrusal olmayan öğrenilmesi gereken özellikler | Genelde **ReLU → torch.nn.ReLU()** kullanılır. |
+| Havuzlama Katmanı (Pooling Layer) | Resimlerden öğrenilen bilgilerdeki çok boyutluluğu ortadan kaldırma | **Maksimum → torch.nn.MaxPool2d() veya Ortalama → torch.nn.AvgPool2d()** |
+| Çıktı Katmanı / Doğrusal Katman (Output / Linear Layer) | Öğrenilmiş özellikleri ve çıktıları hedeflenen etiketlere yerleştirme | **torch.nn.Linear(out_features = [number_of_classes])** |
+| Çıktı Aktivasyonu (Output Activation) | Çıkan logaritmaları tahmin olasılıklarına dönüştürme | **Binary → torch.sigmoid() veya Multiclass → torch.softmax()** |
+
+
 
 
