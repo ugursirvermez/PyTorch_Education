@@ -165,6 +165,13 @@ Evrişimsel sinir ağları olarak Türkçe’ye çevrilmektedir. Sinir ağları 
 | Çıktı Katmanı / Doğrusal Katman (Output / Linear Layer) | Öğrenilmiş özellikleri ve çıktıları hedeflenen etiketlere yerleştirme | **torch.nn.Linear(out_features = [number_of_classes])** |
 | Çıktı Aktivasyonu (Output Activation) | Çıkan logaritmaları tahmin olasılıklarına dönüştürme | **Binary → torch.sigmoid() veya Multiclass → torch.softmax()** |
 
+![convlayer_detailedview_demo](https://github.com/user-attachments/assets/e6c04e54-ee78-484a-a022-dce25a8cab31)
 
+## Modeli Kullanma
+PyTorch’ta Supervised ve Unsupervised Learning ile ilgili pek çok işlemi yapabilir hale geldik. Üstelik akademik araştırmalardan faydalanarak kendi modellerimizi geliştirip iyileştirebiliriz. Ancak oluşturduğumuz modeller şuan mevcut haliyle sadece Google Colab’te python komutları ile çalışıyor. Yani bizim herhangi bir uygulamaya bağlı veya tek başına çalışan bir modelimiz yok. Dolayısıyla sunuculardan bağımsız, kendi amaçlarımız doğrultusunda farklı sistemlere entegre edebileceğimiz, bir araca dönüştürmemiz gerekir. Model Deployment kelime anlamı olarak model dağıtımı olarak karşımıza çıkıyor. Yani bir araç olarak farklı sürümlerde ve farklı uygulamalarda ürettiğimiz makine öğrenme araçlarını kullanmamız olarak değerlendirebiliriz. Burada modeli kullanma olarak çeviriyoruz çünkü modeli bir uygulamaya gömerken Türkçe karşılığını tanımlayamıyoruz. Şimdi yapacağımız şey tam olarak aşağıdaki görseldeki gibi olacak:
+
+![model-deployment](https://github.com/user-attachments/assets/5cb50653-4102-4b52-a858-c9c0cdbac7d2)
+
+Bu makine öğrenmesini dışarı aktarma işlemi oldukça önemlidir çünkü bir modelin çok fazla teste ihtiyacı vardır. En azından çalıştığını düşündüğümüz modeli yayınladığımızda hata olasılığını bilmeye ihtiyaç duyarız. Modeli dışarı aktarma işlemi son derece önemli bir ihtiyaçtır. Kullanılabilir ürünler oluşturmak için modeli dışarı aktarmanın birden fazla farklı yöntemi vardır. Bunun öncesinde modeli hangi amaçla kullanacağımızı iyi belirlemeliyiz. Örneğin; modeli “yemek mi yoksa yemek değil mi” diye ayırmak için kullanabileceğimiz gibi yemeklerin türüne göre bilgi vermesini isteyen bir uygulama bile yapabiliriz. Burada amacımızın ne olduğunu iyi seçmeliyiz. Çünkü model içinde kullandığımız sınıf isimleri değişebilir. Peki, biz kendi projemizde neyi yapacağız? FoodVision Mini için oluşturduğumuz EffNetB2 ve ViT modellerini bir mobil uygulama çerçevesinde hazır hale getireceğiz. Modellerin çalışıp çalışmadığını, çalışıyorsa ne kadar başarılı sonuçlar verdiğini inceleyeceğiz. Modelimizi hem uygulama da hem bulut aracılığı ile birlikte kullanımını karşılaştıracağız. Bu sayede deneylerimizi canlı bir sürüm de test edebileceğiz.
 
 
