@@ -13,10 +13,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - name: git-access
-        env: 
-         HG: ${{ secrets.HF }}
-        run: git remote set-url origin git@hf.co:https://huggingface.co/spaces/ugursirvermez/FoodVision101
+          
       - name: Add remote 
         env:
           HG: ${{ secrets.HF }}
