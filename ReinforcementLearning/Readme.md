@@ -14,7 +14,9 @@ Bu tür eylem-gözlem değişimlerinden birine zaman adımı (timestep) denir. R
 Örneğin, birimin bir robotu uzayda belirli bir noktaya yönlendirmesini istiyoruz. Bunu başarırsa (veya bu hedefe doğru bir miktar ilerleme kaydederse), bu zaman adımı için gözlemle birlikte pozitif bir ödül alacaktır. 
 Ödül, ajan henüz başarılı olamadıysa (veya herhangi bir ilerleme kaydedemediyse) negatif veya 0 da olabilir. Daha sonra birim, birçok zaman adımında biriktirdiği ödülü en üst düzeye çıkarmak için eğitilecektir. 
 Bazı zaman adımlarından sonra, ortam bir son duruma girebilir. Örneğin, birim olarak kulanılan robot artık çalışamıyor olabilir. Bu durumda, ortamı yeni bir başlangıç durumuna sıfırlamak istiyoruz. Ortam, birim böyle bir son duruma girerse ona bir tamamlandı sinyali gönderir. 
-Tüm tamamlandı sinyallerinin "felaket niteliğinde bir arıza" tarafından tetiklenmesi gerekmez: Bazen, belirli sayıda zaman adımından sonra veya etken ortamda bir görevi tamamlamayı başardığında da bir tamamlandı sinyali göndermek isteriz. 
-İşte buna benzer işlemlerle bir RL eğitim döngüsü oluşturmuş oluyoruz. Bütün yaptığımız sadece bu olacak.
+Tüm tamamlandı sinyallerinin "felaket niteliğinde bir arıza" tarafından tetiklenmesi gerekmez: Bazen, belirli sayıda zaman adımından sonra veya etken ortamda bir görevi tamamlamayı başardığında da bir tamamlandı sinyali göndermek isteriz. İşte buna benzer işlemlerle bir RL eğitim döngüsü oluşturmuş oluyoruz.
+
 ![RL-Test](https://github.com/user-attachments/assets/fbae8692-54e7-46e1-ba4b-606273c497bf)
-![RL-picture](https://github.com/user-attachments/assets/e267d776-c104-44ff-8496-4d3655f9e024)
+![CartPolev1](https://github.com/user-attachments/assets/270c25ed-71bd-40e3-848f-6c4ce4e20ac9)
+![CartPolev2](https://github.com/user-attachments/assets/a62ab3bd-d956-4029-b12b-ff531bbef133)
+
