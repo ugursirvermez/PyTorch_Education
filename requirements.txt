@@ -1,0 +1,30 @@
+# Core Python libraries
+numpy
+pandas
+matplotlib
+seaborn
+scikit-learn
+
+# Deep Learning Framework
+torch
+torchvision
+torchaudio
+
+# Utilities
+tqdm
+requests
+Pillow
+
+# Visualization & interactive work
+notebook
+jupyterlab
+ipykernel
+ipywidgets
+
+# Optional but helpful
+plotly
+tensorboard
+
+# For deployment / exporting (if used later)
+onnx
+torchinfo
