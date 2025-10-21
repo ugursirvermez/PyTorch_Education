@@ -1,0 +1,45 @@
+# Sistem dosyaları
+.DS_Store
+Thumbs.db
+
+# Python derleme ve önbellek dosyaları
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+# Jupyter otomatik klasörleri
+.ipynb_checkpoints/
+
+# Ortam dosyaları
+.env
+.venv/
+env/
+venv/
+*.env
+
+# PyTorch / veri dosyaları
+*.pt
+*.pth
+*.ckpt
+*.onnx
+*.h5
+*.pkl
+
+# Büyük veri veya deney klasörleri
+/data/
+*/data/
+*/ExperimentData/
+*/datasets/
+*.zip
+*.tar
+*.gz
+
+# IDE / editör dosyaları
+.vscode/
+.idea/
+
+# Loglar
+*.log
+logs/
