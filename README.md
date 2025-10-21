@@ -1,6 +1,4 @@
-# PyTorch Eğitimi 🔥
-
-Bu dersi Youtube’taki 25 saatlik bir içerikten alıyorum. İçerik, FreeCodeCamp.org'ta ücretsiz dağıtılmış olmakla birlikte, Daniel Bourke (@mrdbourke), tarafından hazırlanan eğitim içeriğinden faydalanarak kendi öğrendiklerimi yazdığım bir repo oluşturdum. Oradaki içeriği özümseyip kendi çapımda yorumlayıp bir ders notu haline getirdim. Ayrıca aşağıda eğitim boyunca not aldığım ve test ettiğim kodların yer aldığı Github repo’su yer almaktadır.
+# Eğitim Teknolojileri için PyTorch Eğitimi 🔥
 **NOT:** Oluşturduğum notların küçük bir kısmı burada yer almaktadır.
 ## Sözlük
 - Deep Learning → DL → Derin Öğrenme
