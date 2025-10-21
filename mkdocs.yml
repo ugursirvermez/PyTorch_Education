@@ -60,6 +60,10 @@ markdown_extensions:
   - pymdownx.details
   - pymdownx.tasklist
   - pymdownx.tilde
+  
+  plugins:
+  - search
+  - mkdocs-jupyter
 
 extra:
   social:
