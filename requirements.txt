@@ -28,3 +28,8 @@ tensorboard
 # For deployment / exporting (if used later)
 onnx
 torchinfo
+
+mkdocs
+mkdocs-material
+pymdown-extensions
+mkdocs-jupyter
