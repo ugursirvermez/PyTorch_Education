@@ -1,0 +1,34 @@
+cff-version: 1.2.0
+message: If you use this open educational resource, please cite it as below.
+title: "PyTorch Eğitim Kaynakları (PyTorch Education Open Educational Resource)"
+abstract: >
+  An open educational resource written in Turkish to teach PyTorch fundamentals and applications in deep learning and educational technologies. 
+  The project combines Jupyter notebooks, explanatory markdowns, and illustrative examples for educators and students. 
+  Licensed under Creative Commons BY-NC-SA 4.0.
+authors:
+  - family-names: Sirvermez
+    given-names: Uğur
+    affiliation: Bursa Uludağ Üniversitesi
+    orcid: "https://orcid.org/0000-0001-7266-6408"
+version: "1.0.0"
+date-released: 2025-10-21
+repository-code: "https://github.com/ugursirvermez/PyTorch_Education"
+license: "CC-BY-NC-SA-4.0"
+type: software
+keywords:
+  - PyTorch
+  - Deep Learning
+  - Machine Learning
+  - Education
+  - Open Educational Resource
+  - Turkish
+preferred-citation:
+  type: article
+  title: "PyTorch Eğitim Kaynakları (Open Educational Resource)"
+  authors:
+    - family-names: Sirvermez
+      given-names: Uğur
+  year: 2025
+  publisher: "GitHub & Zenodo"
+  url: "https://github.com/ugursirvermez/PyTorch_Education"
+  doi: "10.5281/zenodo.xxxxxxx"
