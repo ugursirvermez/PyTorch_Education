@@ -1,0 +1,73 @@
+site_name: PyTorch Eğitim Kaynakları
+site_description: "Açık Kaynak PyTorch Eğitim Materyali (in Turkish)"
+site_author: "Uğur Şirvermez"
+site_url: "https://ugursirvermez.github.io/PyTorch_Education/"
+
+repo_url: "https://github.com/ugursirvermez/PyTorch_Education"
+repo_name: "GitHub Repository"
+
+theme:
+  name: material
+  language: tr
+  features:
+    - navigation.instant
+    - navigation.expand
+    - toc.integrate
+    - content.code.annotate
+    - content.code.copy
+    - navigation.top
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: deep orange
+    - scheme: slate
+      primary: indigo
+      accent: deep orange
+      toggle:
+        icon: material/weather-night
+        name: Koyu Mod
+  icon:
+    repo: fontawesome/brands/github
+
+nav:
+  - Ana Sayfa: index.md
+  - Giriş:
+      - "PyTorch Nedir?": 00_pyTorch.ipynb
+      - "Tensors ve Operasyonlar": 01_tensors.ipynb
+  - Modeller:
+      - "Sinir Ağları": 04_neural_networks.ipynb
+      - "Eğitim Döngüsü": 05_training_loop.ipynb
+      - "Transfer Learning": 07_transfer_learning.ipynb
+  - Örnek Projeler:
+      - "FoodVision101": 10_foodvision101.ipynb
+      - "Reinforcement Learning": 13_pytorch_reinforcement_learning.ipynb
+  - Hakkında: about.md
+
+markdown_extensions:
+  - toc:
+      permalink: true
+  - tables
+  - fenced_code
+  - codehilite
+  - admonition
+  - footnotes
+  - def_list
+  - attr_list
+  - md_in_html
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - pymdownx.emoji
+  - pymdownx.details
+  - pymdownx.tasklist
+  - pymdownx.tilde
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/ugursirvermez
+    - icon: fontawesome/brands/linkedin
+      link: https://www.linkedin.com/in/ugursirvermez
+  copyright: >
+    © 2025 Uğur Şirvermez —
+    Licensed under
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.tr">CC BY-NC-SA 4.0</a>
