@@ -1,16 +1,26 @@
 cff-version: 1.2.0
-message: If you use this open educational resource, please cite it as below.
+message: >
+  Bu açık eğitim kaynağını kullanıyorsanız lütfen aşağıdaki şekilde kaynak gösterin.
+  If you use this open educational resource, please cite it as below.
 title: "PyTorch Eğitim Kaynakları (PyTorch Education Open Educational Resource)"
 abstract: >
-  An open educational resource written in Turkish to teach PyTorch fundamentals and applications in deep learning and educational technologies. 
-  The project combines Jupyter notebooks, explanatory markdowns, and illustrative examples for educators and students. 
+  An open educational resource written in Turkish to teach PyTorch fundamentals
+  and applications in deep learning and educational technologies.
+  The project combines Jupyter notebooks, explanatory markdowns, and illustrative
+  examples for educators and students. Notebooks are pedagogically structured with
+  learning objectives, prerequisites, and module summaries.
   Licensed under Creative Commons BY-NC-SA 4.0.
+
+  This work is inspired by and builds upon Daniel Bourke's "Zero to Mastery Learn
+  PyTorch for Deep Learning" course (learnpytorch.io), which is licensed under
+  MIT License. The original concepts, reorganized, translated into Turkish, and
+  adapted for educational technology audiences with new pedagogical structure.
 authors:
   - family-names: Sirvermez
     given-names: Uğur
     affiliation: Bursa Uludağ Üniversitesi
     orcid: "https://orcid.org/0000-0001-7266-6408"
-version: "1.0.0"
+version: "1.1.0"
 date-released: 2025-10-21
 repository-code: "https://github.com/ugursirvermez/PyTorch_Education"
 license: "CC-BY-NC-SA-4.0"
@@ -22,6 +32,28 @@ keywords:
   - Education
   - Open Educational Resource
   - Turkish
+  - Educational Technology
+
+# Orijinal kaynaklar / Original sources this work is derived from:
+references:
+  - type: software
+    title: "Zero to Mastery Learn PyTorch for Deep Learning"
+    authors:
+      - family-names: Bourke
+        given-names: Daniel
+    url: "https://github.com/mrdbourke/pytorch-deep-learning"
+    repository-code: "https://github.com/mrdbourke/pytorch-deep-learning"
+    year: 2022
+    license: MIT
+    notes: >
+      Bu eğitim materyali, Daniel Bourke'un "Zero to Mastery Learn PyTorch for
+      Deep Learning" adlı çalışmasından ilham alınarak hazırlanmıştır.
+      İçerik Türkçeye çevrilmiş, yeniden yapılandırılmış ve eğitim teknolojistleri
+      için pedagojik bir formata dönüştürülmüştür.
+      This educational material is inspired by Daniel Bourke's "Zero to Mastery
+      Learn PyTorch for Deep Learning". Content has been translated into Turkish,
+      restructured, and adapted into a pedagogical format for educational technologists.
+
 preferred-citation:
   type: article
   title: "PyTorch Eğitim Kaynakları (Open Educational Resource)"

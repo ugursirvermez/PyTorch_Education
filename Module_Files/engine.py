@@ -1,109 +1,192 @@
-import torch
+"""
+engine.py — Eğitim ve Değerlendirme Motoru
+============================================
+Proje  : Eğitim Teknolojileri için PyTorch Eğitimi
+Yazar  : Ugur Sirvermez — Bursa Uludag Universitesi
+Lisans : CC BY-NC-SA 4.0
 
-from tqdm.auto import tqdm
+Bu modül, PyTorch modellerinin eğitim ve değerlendirme döngülerini
+yeniden kullanılabilir fonksiyonlar olarak sağlar.
+
+İçerik:
+    - egitim_adimi  : Tek bir epoch için eğitim döngüsü.
+    - test_adimi    : Tek bir epoch için değerlendirme döngüsü.
+    - egit          : Belirtilen epoch sayısı kadar eğitim + değerlendirme.
+
+Kullanım:
+    from Module_Files import engine
+    sonuclar = engine.egit(
+        model, train_dl, test_dl,
+        optimizer, loss_fn,
+        epochs=5, device=device
+    )
+"""
+
 from typing import Dict, List, Tuple
 
-def train_step(model: torch.nn.Module, dataloader: torch.utils.data.DataLoader,loss_fn: torch.nn.Module, optimizer: torch.optim.Optimizer,
-               device: torch.device) -> Tuple[float, float]:
-  
-  # modeli eğitmeye başla
-  model.train()
-  
-  # loss ve accuracy yani kayıp ve tutarlılık miktarı
-  train_loss, train_acc = 0, 0
+import torch
+from tqdm.auto import tqdm
 
-   
-  # Donguyu dataloader'dan çalıştır
-  for batch, (X, y) in enumerate(dataloader):
-      # device ? cpu : gpu -> cihaza yolla
-      X, y = X.to(device), y.to(device)
 
-      # 1.Forward etme
-      y_pred = model(X)
+# ─────────────────────────────────────────────
+# Tek Epoch Eğitim Adımı
+# ─────────────────────────────────────────────
 
-      # 2. Kaybı hesaplama
-      loss = loss_fn(y_pred, y)
-      train_loss += loss.item() 
+def egitim_adimi(
+    model: torch.nn.Module,
+    dataloader: torch.utils.data.DataLoader,
+    kayip_fn: torch.nn.Module,
+    optimizer: torch.optim.Optimizer,
+    device: torch.device
+) -> Tuple[float, float]:
+    """Modeli bir epoch boyunca eğitir.
 
-      # 3. Optimizer zero grad
-      optimizer.zero_grad()
+    Eğitim döngüsü adımları:
+        1. model.train() — eğitim modunu aç
+        2. İleri geçiş (forward pass)
+        3. Kaybı hesapla
+        4. optimizer.zero_grad() — önceki gradyanları sıfırla
+        5. loss.backward() — geri yayılım
+        6. optimizer.step() — ağırlıkları güncelle
 
-      # 4. Loss backward
-      loss.backward()
+    Args:
+        model      : Eğitilecek PyTorch modeli.
+        dataloader : Eğitim mini-batch'lerini sağlayan DataLoader.
+        kayip_fn   : Kayıp fonksiyonu (örn. nn.CrossEntropyLoss).
+        optimizer  : Ağırlık güncelleyici (örn. torch.optim.Adam).
+        device     : Hesaplamaların yapılacağı cihaz ("cpu" veya "cuda").
 
-      # 5. Optimizer step
-      optimizer.step()
+    Returns:
+        (ortalama_egitim_kaybi, ortalama_egitim_dogrulugu) demeti.
+    """
+    model.train()
+    toplam_kayip = 0.0
+    toplam_dogru = 0.0
 
-      # Batch'teki değerleri kümeleyerek hesapla.
-      y_pred_class = torch.argmax(torch.softmax(y_pred, dim=1), dim=1)
-      train_acc += (y_pred_class == y).sum().item()/len(y_pred)
+    for X, y in dataloader:
+        X, y = X.to(device), y.to(device)
 
-  # Ortalama kayıp ve tutarlılığı hesapla.
-  train_loss = train_loss / len(dataloader)
-  train_acc = train_acc / len(dataloader)
-  return train_loss, train_acc
+        # İleri geçiş
+        y_tahmin = model(X)
 
-def test_step(model: torch.nn.Module, dataloader: torch.utils.data.DataLoader, loss_fn: torch.nn.Module,
-              device: torch.device) -> Tuple[float, float]:
+        # Kayıp hesapla ve biriktir
+        kayip = kayip_fn(y_tahmin, y)
+        toplam_kayip += kayip.item()
 
-  # Modeli Değerlendir
-  model.eval() 
-  
-  # test kayıp ve tutarlılıkları hesaplayacağız
-  test_loss, test_acc = 0, 0
-  # İçeriği kontrol edeceğiz.
-  with torch.inference_mode():
-      # DataLoader'daki Batch'i yükle
-      for batch, (X, y) in enumerate(dataloader):
-          # device ? cpu : gpu -> cihaza yolla
-          X, y = X.to(device), y.to(device)
-  
-          # 1. Forward et
-          test_pred_logits = model(X)
+        # Geri yayılım + ağırlık güncelleme
+        optimizer.zero_grad()
+        kayip.backward()
+        optimizer.step()
 
-          # 2. loss ve acc hesapla
-          loss = loss_fn(test_pred_logits, y)
-          test_loss += loss.item()
-          
-          test_pred_labels = test_pred_logits.argmax(dim=1) #logaritmadan çevir.
-          test_acc += ((test_pred_labels == y).sum().item()/len(test_pred_labels))
-          
-  # ortalama test loss ve acc'ı yazdır.
-  test_loss = test_loss / len(dataloader)
-  test_acc = test_acc / len(dataloader)
-  return test_loss, test_acc
+        # Doğruluğu hesapla (sınıflandırma için)
+        tahmin_sinif = torch.argmax(torch.softmax(y_tahmin, dim=1), dim=1)
+        toplam_dogru += (tahmin_sinif == y).sum().item() / len(y_tahmin)
 
-#TRAIN_STEP VE TEST_STEP ILE DONGUYU CALISTIR!
-def train(model: torch.nn.Module, train_dataloader: torch.utils.data.DataLoader, test_dataloader: torch.utils.data.DataLoader,
-          optimizer: torch.optim.Optimizer, loss_fn: torch.nn.Module, epochs: int, device: torch.device) -> Dict[str, List]:
-  # İki step'teki sonuçları yazdır.
-  results = {"train_loss": [],
-      "train_acc": [],
-      "test_loss": [],
-      "test_acc": []
-  }
-  
-  # train ve test step'lerini döngüyle çalıştır.
-  for epoch in tqdm(range(epochs)):
-      #Train_Step kısmı
-      train_loss, train_acc = train_step(model=model,dataloader=train_dataloader, loss_fn=loss_fn, optimizer=optimizer, device=device)
-      #Test_Step kısmı
-      test_loss, test_acc = test_step(model=model, dataloader=test_dataloader,loss_fn=loss_fn, device=device)
-      
-      # Neler olduğunu adım adım yazdır.
-      print(
-          f"Epoch: {epoch+1} | "
-          f"train_loss: {train_loss:.4f} | "
-          f"train_acc: {train_acc:.4f} | "
-          f"test_loss: {test_loss:.4f} | "
-          f"test_acc: {test_acc:.4f}"
-      )
+    ort_kayip  = toplam_kayip  / len(dataloader)
+    ort_dogru  = toplam_dogru  / len(dataloader)
+    return ort_kayip, ort_dogru
 
-      # Güncellenen sonuçları yazdir
-      results["train_loss"].append(train_loss)
-      results["train_acc"].append(train_acc)
-      results["test_loss"].append(test_loss)
-      results["test_acc"].append(test_acc)
 
-  # Toplam sonucu ver.
-  return results
+# ─────────────────────────────────────────────
+# Tek Epoch Değerlendirme Adımı
+# ─────────────────────────────────────────────
+
+def test_adimi(
+    model: torch.nn.Module,
+    dataloader: torch.utils.data.DataLoader,
+    kayip_fn: torch.nn.Module,
+    device: torch.device
+) -> Tuple[float, float]:
+    """Modeli değerlendirme modunda çalıştırır; gradyan hesaplanmaz.
+
+    Args:
+        model      : Değerlendirilecek PyTorch modeli.
+        dataloader : Test mini-batch'lerini sağlayan DataLoader.
+        kayip_fn   : Kayıp fonksiyonu.
+        device     : Hesaplama cihazı.
+
+    Returns:
+        (ortalama_test_kaybi, ortalama_test_dogrulugu) demeti.
+    """
+    model.eval()
+    toplam_kayip = 0.0
+    toplam_dogru = 0.0
+
+    with torch.inference_mode():
+        for X, y in dataloader:
+            X, y = X.to(device), y.to(device)
+
+            tahmin_logit = model(X)
+            kayip = kayip_fn(tahmin_logit, y)
+            toplam_kayip += kayip.item()
+
+            tahmin_sinif = tahmin_logit.argmax(dim=1)
+            toplam_dogru += (tahmin_sinif == y).sum().item() / len(tahmin_sinif)
+
+    ort_kayip = toplam_kayip / len(dataloader)
+    ort_dogru = toplam_dogru / len(dataloader)
+    return ort_kayip, ort_dogru
+
+
+# ─────────────────────────────────────────────
+# Ana Eğitim Fonksiyonu
+# ─────────────────────────────────────────────
+
+def egit(
+    model: torch.nn.Module,
+    train_dataloader: torch.utils.data.DataLoader,
+    test_dataloader: torch.utils.data.DataLoader,
+    optimizer: torch.optim.Optimizer,
+    kayip_fn: torch.nn.Module,
+    epochs: int,
+    device: torch.device
+) -> Dict[str, List[float]]:
+    """Modeli belirtilen epoch sayısı kadar eğitir ve sonuçları döndürür.
+
+    Her epoch'ta eğitim adımı ve test adımı çalışır; sonuçlar sözlükte biriktirilir.
+
+    Args:
+        model             : Eğitilecek PyTorch modeli.
+        train_dataloader  : Eğitim DataLoader'ı.
+        test_dataloader   : Test DataLoader'ı.
+        optimizer         : Optimizer nesnesi.
+        kayip_fn          : Kayıp fonksiyonu.
+        epochs            : Kaç epoch eğitim yapılacağı.
+        device            : Hesaplama cihazı.
+
+    Returns:
+        Şu anahtarları içeren sözlük:
+            "egitim_kayip", "egitim_dogru", "test_kayip", "test_dogru"
+        Her anahtar altında epoch başına ölçüm listesi bulunur.
+
+    Örnek:
+        >>> sonuclar = egit(model, train_dl, test_dl, opt, loss_fn, 5, device)
+        >>> print(sonuclar["test_dogru"])
+    """
+    sonuclar: Dict[str, List[float]] = {
+        "egitim_kayip": [],
+        "egitim_dogru": [],
+        "test_kayip":   [],
+        "test_dogru":   []
+    }
+
+    for epoch in tqdm(range(epochs)):
+        eg_kayip, eg_dogru = egitim_adimi(
+            model, train_dataloader, kayip_fn, optimizer, device
+        )
+        ts_kayip, ts_dogru = test_adimi(
+            model, test_dataloader, kayip_fn, device
+        )
+
+        print(
+            f"Epoch {epoch + 1:3d}/{epochs} | "
+            f"Eğitim → kayıp: {eg_kayip:.4f}  doğruluk: {eg_dogru:.4f} | "
+            f"Test   → kayıp: {ts_kayip:.4f}  doğruluk: {ts_dogru:.4f}"
+        )
+
+        sonuclar["egitim_kayip"].append(eg_kayip)
+        sonuclar["egitim_dogru"].append(eg_dogru)
+        sonuclar["test_kayip"].append(ts_kayip)
+        sonuclar["test_dogru"].append(ts_dogru)
+
+    return sonuclar

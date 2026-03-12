@@ -1,100 +1,123 @@
-#going_modular adında olusturdugumuz dosyanın üzerine bu kodu data_setup.py olarak yaz.
+"""
+data_setup.py — Veri Hazırlama Modülü
+======================================
+Proje  : Eğitim Teknolojileri için PyTorch Eğitimi
+Yazar  : Ugur Sirvermez — Bursa Uludag Universitesi
+Lisans : CC BY-NC-SA 4.0
+
+Bu modül, görüntü sınıflandırma projeleri için veri setini
+indirir, ayıklar ve DataLoader nesnelerine dönüştürür.
+
+Kullanım:
+    from Module_Files import data_setup
+    train_dl, test_dl, siniflar = data_setup.create_dataloaders(
+        train_dir="data/pizza_steak_sushi/train",
+        test_dir="data/pizza_steak_sushi/test",
+        transform=transforms.ToTensor(),
+        batch_size=32
+    )
+"""
+
 import os
 import zipfile
 from pathlib import Path
-import requests
+from typing import Tuple, List
 
+import requests
 import torch
-#Torchvision Kutuphaneleri
-from torchvision import transforms
-from torchvision import datasets
+from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
 
-#-------------------------------------------------------------------------------------------------------------
-#VERİ SETLERİ
 
-# Dosyaların cikacagi yolu ayarla
-data_path = Path("data/")
-image_path = data_path / "pizza_steak_sushi"
+# ─────────────────────────────────────────────
+# Veri İndirme
+# ─────────────────────────────────────────────
 
-# Eger dosya yoksa indirmeye basla
-if image_path.is_dir():
-    print(f"{image_path} dosya zaten var.")
-else:
-    print(f"{image_path} Dosyası olusturuluyor")
-    image_path.mkdir(parents=True, exist_ok=True)
+def veri_indir(
+    kaynak_url: str,
+    hedef_klasor: Path
+) -> Path:
+    """Zip arşivini indirir, ayıklar ve yerel klasöre kaydeder.
 
-# Yemek bilgilerini indir
-with open(data_path / "pizza_steak_sushi.zip", "wb") as f:
-    request = requests.get("https://github.com/mrdbourke/pytorch-deep-learning/raw/main/data/pizza_steak_sushi.zip")
-    print("İndiriliyor...")
-    f.write(request.content)
+    Args:
+        kaynak_url   : İndirilecek zip dosyasının URL'si.
+        hedef_klasor : Dosyaların ayıklanacağı klasör yolu (Path nesnesi).
 
-# Dosyaları zipten cikar
-with zipfile.ZipFile(data_path / "pizza_steak_sushi.zip", "r") as zip_ref:
-    print("Sıkıştırılmış dosyada çıkarılıyor...")
-    zip_ref.extractall(image_path)
+    Returns:
+        Görüntülerin bulunduğu hedef klasörün Path nesnesi.
+    """
+    if hedef_klasor.is_dir():
+        print(f"[data_setup] Veri zaten mevcut → {hedef_klasor}")
+        return hedef_klasor
 
-# Zip dosyasini sil.
-os.remove(data_path / "pizza_steak_sushi.zip")
+    print(f"[data_setup] İndiriliyor: {kaynak_url}")
+    hedef_klasor.mkdir(parents=True, exist_ok=True)
 
-# train ve test degiskenlerine dosyalari at.
-train_dir = image_path / "train"
-test_dir = image_path / "test"
+    zip_yolu = hedef_klasor.parent / "gecici_veri.zip"
+    with open(zip_yolu, "wb") as f:
+        f.write(requests.get(kaynak_url).content)
 
-# Transform ile verileri donustur.
-data_transform = transforms.Compose([
-    transforms.Resize((64, 64)),
-    transforms.ToTensor(),
-])
+    with zipfile.ZipFile(zip_yolu, "r") as zf:
+        print("[data_setup] Ayıklanıyor...")
+        zf.extractall(hedef_klasor)
 
-# ImageFolder'dan bir train_data olustur. Data Load etme işlemi
-train_data = datasets.ImageFolder(root=train_dir, # hedeflenen görseller
-                                  transform=data_transform, # data_transform şekline çevir
-                                  target_transform=None) # Etikete özel dnosutrme yapılmayacak.
+    os.remove(zip_yolu)
+    print(f"[data_setup] Tamamlandı → {hedef_klasor}")
+    return hedef_klasor
 
-#Test_data benzer şekilde olusturuldu.
-test_data = datasets.ImageFolder(root=test_dir,
-                                 transform=data_transform)
 
-print(f"Train data:\n{train_data}\nTest data:\n{test_data}") #veriler geldi mi?
-#--------------------------------------------------------------------------------------------------------
+# ─────────────────────────────────────────────
+# DataLoader Oluşturma
+# ─────────────────────────────────────────────
 
-#DATA_SETUP.PY BURADA BASLIYOR
-#İşlemci sayilari
-NUM_WORKERS = os.cpu_count()
-
-#DataLoader Fonksiyonu DataSet -> DataLoader
-#Train, test ve sınıfların etiketlerini deger olarak dondurecek bir fonksiyondur.
 def create_dataloaders(
-    train_dir: str, #Train Klasoru
-    test_dir: str, #Test Klasoru
-    transform: transforms.Compose, #transform dosyalarını bir araya getir. (train ve test)
-    batch_size: int, #DataLoader'dan ne kadar batch yapılacak?
-    num_workers: int=NUM_WORKERS #DataLoader'da kaç işlemci çalışacak?
-):
-   # ImageFolder Kullanarak dataset olusturma
-  train_data = datasets.ImageFolder(train_dir, transform=transform)
-  test_data = datasets.ImageFolder(test_dir, transform=transform)
+    train_dir: str,
+    test_dir: str,
+    transform: transforms.Compose,
+    batch_size: int = 32,
+    num_workers: int = 0
+) -> Tuple[DataLoader, DataLoader, List[str]]:
+    """Eğitim ve test DataLoader'larını oluşturur.
 
-  # Train_data'da etiketlenmiş verileri al.
-  class_names = train_data.classes
+    torchvision.datasets.ImageFolder kullanır; klasör yapısı şu şekilde
+    olmalıdır:
+        train_dir/
+            sinif_adi_1/  resim1.jpg  resim2.jpg ...
+            sinif_adi_2/  ...
+        test_dir/
+            sinif_adi_1/  ...
 
-  # Resimleri DataLoader'a donustur
-  train_dataloader = DataLoader(train_data,
-      batch_size=batch_size,
-      shuffle=True,
-      num_workers=num_workers,
-      pin_memory=True,
-  )
-  test_dataloader = DataLoader(
-      test_data,
-      batch_size=batch_size,
-      shuffle=False,
-      num_workers=num_workers,
-      pin_memory=True,
-  )
+    Args:
+        train_dir   : Eğitim görüntülerinin bulunduğu klasör yolu (str).
+        test_dir    : Test görüntülerinin bulunduğu klasör yolu (str).
+        transform   : Görüntülere uygulanacak torchvision dönüşüm zinciri.
+        batch_size  : Her mini-batch'teki örnek sayısı. Varsayılan: 32.
+        num_workers : Veri yükleme için kullanılacak işçi sayısı. Varsayılan: 0.
 
-  return train_dataloader, test_dataloader, class_names #Loader dosyaları ve etiketler dondursun.
+    Returns:
+        (train_dataloader, test_dataloader, sinif_adlari) demeti:
+            - train_dataloader : Karıştırılmış eğitim verisi yükleyici.
+            - test_dataloader  : Sıralı test verisi yükleyici.
+            - sinif_adlari     : Sınıf isimlerinin alfabetik listesi.
+    """
+    egitim_verisi = datasets.ImageFolder(train_dir, transform=transform)
+    test_verisi   = datasets.ImageFolder(test_dir,  transform=transform)
 
-#data_setup.py ile dosyaları DataLoader'ı kullanabiliriz.
+    sinif_adlari = egitim_verisi.classes
+
+    train_dataloader = DataLoader(
+        egitim_verisi,
+        batch_size=batch_size,
+        shuffle=True,
+        num_workers=num_workers,
+        pin_memory=torch.cuda.is_available()
+    )
+    test_dataloader = DataLoader(
+        test_verisi,
+        batch_size=batch_size,
+        shuffle=False,
+        num_workers=num_workers,
+        pin_memory=torch.cuda.is_available()
+    )
+
+    return train_dataloader, test_dataloader, sinif_adlari
