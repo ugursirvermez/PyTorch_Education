@@ -1,7 +1,7 @@
 # Eğitim Teknolojileri için PyTorch Eğitimi 🔥
 
 [![License: CC BY-NC-SA 4.0](https://img.shields.io/badge/Lisans-CC%20BY--NC--SA%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.19015283.svg)](https://doi.org/10.5281/zenodo.19015283)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.19015554.svg)](https://doi.org/10.5281/zenodo.19015554)
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ugursirvermez/PyTorch_Education)
 [![ORCID](https://img.shields.io/badge/ORCID-0000--0001--7266--6408-green)](https://orcid.org/0000-0001-7266-6408)
 
@@ -326,7 +326,7 @@ Bu proje aşağıdaki açık kaynak çalışmalardan yararlanılarak hazırlanm�
 Sirvermez, U. (2025). Eğitim Teknolojileri için PyTorch Eğitimi
 [Açık Eğitim Kaynağı]. GitHub & Zenodo.
 https://github.com/ugursirvermez/PyTorch_Education
-doi: 10.5281/zenodo.xxxxxxx
+doi: 10.5281/zenodo.19015554
 ```
 
 Bu proje Daniel Bourke'un çalışması üzerine inşa edilmiştir.
